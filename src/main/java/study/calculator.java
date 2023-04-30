@@ -1,5 +1,5 @@
-import java.util.ArrayList;
-import java.util.List;
+package study;
+
 import java.util.Scanner;
 
 public class calculator {
@@ -10,20 +10,23 @@ public class calculator {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         String input = sc.nextLine();
-        String[] params = input.split(" ");
         calculator ca = new calculator();
         // 입력 케이스
         // 숫자 / 사칙연산 기호
         // 앞에서 나온 순서대로 연산
-        int result = ca.calculate(params[0], params[1], params[2]);
-        for(int i=3; i< params.length; i+=2) {
-            result = ca.calculate(String.valueOf(result), params[i], params[i+1]);
-        }
-
-        System.out.println(result);
+        System.out.println(ca.calculate(input));
     }
 
-    int calculate(String a, String sign, String b) {
+    int calculate(String input) {
+        String[] params = input.split(" ");
+        int result = process(params[0], params[1], params[2]);
+        for(int i=3; i< params.length; i+=2) {
+            result = process(String.valueOf(result), params[i], params[i+1]);
+        }
+        return result;
+    }
+
+    int process(String a, String sign, String b) {
         if(sign.equals("+")) return Integer.parseInt(a) + Integer.parseInt(b);
         if(sign.equals("-")) return Integer.parseInt(a) - Integer.parseInt(b);
         if(sign.equals("*")) return Integer.parseInt(a) * Integer.parseInt(b);

@@ -1,8 +1,13 @@
 package study;
 
 import java.util.*;
+import java.util.stream.IntStream;
 
 public class baseball {
+    final String STRIKE = "스트라이크";
+    final String BALL = "볼";
+    final String NOTHING = "낫싱";
+
     /* 기본적으로 1부터 9까지 서로 다른 수로 이루어진 3자리의 수를 맞추는 게임이다.
 
     같은 수가 같은 자리에 있으면 스트라이크, 다른 자리에 있으면 볼, 같은 수가 전혀 없으면 포볼 또는 낫싱이란 힌트를 얻고,
@@ -18,11 +23,12 @@ public class baseball {
     // 순서를 따져야하고, 전체 검색 시 cost가 적은 자료구조
     // 일단 3자리로 고정되어 있으니까 배열로 하고, 전체 순회하자
     // + 랜덤 3자리 숫자 생성
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
 
+    List<Integer> answer;
+
+    public baseball() {
+        answer = generateRandomNumber();
     }
-
 
     public List<Integer> generateRandomNumber() {
         List<Integer> numberPool = new ArrayList<>();
@@ -33,5 +39,23 @@ public class baseball {
         Collections.shuffle(numberPool);
 
         return Arrays.asList(numberPool.get(0), numberPool.get(1), numberPool.get(1));
+    }
+
+    public String compare(List<Integer> number) {
+        int strike = (int) IntStream.range(0, answer.size())
+                .filter(i -> answer.get(i).equals(number.get(i)))
+                .count();
+
+        int ball = (int) answer.stream()
+                .filter(number::contains)
+                .filter(e -> answer.indexOf(e) != number.indexOf(e))
+                .count();
+
+        String result = "";
+
+        result += strike > 0 ? strike + STRIKE : "";
+        result += ball > 0 ? (strike > 0 ? " " : "") + ball + BALL : "";
+
+        return result.isEmpty() ? NOTHING : result;
     }
 }
